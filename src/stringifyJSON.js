@@ -11,7 +11,7 @@ var stringifyJSON = function(obj) {
   	result += obj;
   }
   else if (obj === null) {
-  	return "null";
+  	result += "null";
   }
   else if (typeof obj === "string") {
   	//for one-letter strings
@@ -43,8 +43,13 @@ var stringifyJSON = function(obj) {
 	}
 	else {
 		result += "{";
-		for (key in obj) {
+		var objKeys = Object.keys(obj);
+		for (var i=0; i<objKeys.length; i++) {
+			var key = objKeys[i];
 			result += stringifyJSON(key) + ":" + stringifyJSON(obj[key]);
+			if (i !== objKeys.length - 1) {
+				result += ",";
+			}
 		}
 		result += "}";
 	}
