@@ -24,5 +24,20 @@ var stringifyJSON = function(obj) {
 	  	result = "\"" + result;
 	  }
 	}
+	else if (Array.isArray(obj)) {
+		if (obj.length === 0) {
+			return "[]";
+		}
+		if (obj.length === 1 && arguments[1] === undefined) {
+			result += obj[0] + "]";
+		}
+		else{
+			result += obj[0] + ", "
+			result += stringifyJSON(obj.slice(1), "placeholder");
+		}
+		if (arguments[1] === undefined) {
+			result = "[" + result;
+		}
+	}
   return result;
 };
