@@ -5,4 +5,16 @@
 
 var stringifyJSON = function(obj) {
   // your code goes here
+  //note to self: special characters dictionary: []{},"
+  result = '';
+  if (typeof obj === "number" || typeof obj === "boolean") {
+  	result += obj;
+  }
+  else if (obj === null) {
+  	return "null";
+  }
+  else {
+	  result += stringifyJSON(obj.slice(1));
+	}
+  return result;
 };
