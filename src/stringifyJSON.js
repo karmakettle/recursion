@@ -25,19 +25,14 @@ var stringifyJSON = function(obj) {
 	  }
 	}
 	else if (Array.isArray(obj)) {
-		if (obj.length === 0) {
-			return "[]";
+		result += "[";
+		for (var i=0; i<obj.length; i++) {
+			result += stringifyJSON(obj[0]);
+			if (i !== obj.length - 1) {
+				result += ", ";
+			}
 		}
-		if (obj.length === 1 && arguments[1] === undefined) {
-			result += obj[0] + "]";
-		}
-		else{
-			result += obj[0] + ", "
-			result += stringifyJSON(obj.slice(1), "placeholder");
-		}
-		if (arguments[1] === undefined) {
-			result = "[" + result;
-		}
+		result += "]";
 	}
   return result;
 };
