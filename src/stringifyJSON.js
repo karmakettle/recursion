@@ -27,9 +27,9 @@ var stringifyJSON = function(obj) {
 	else if (Array.isArray(obj)) {
 		result += "[";
 		for (var i=0; i<obj.length; i++) {
-			result += stringifyJSON(obj[0]);
+			result += stringifyJSON(obj[i]);
 			if (i !== obj.length - 1) {
-				result += ", ";
+				result += ",";
 			}
 		}
 		result += "]";
