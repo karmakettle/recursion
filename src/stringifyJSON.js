@@ -46,6 +46,9 @@ var stringifyJSON = function(obj) {
 		var objKeys = Object.keys(obj);
 		for (var i=0; i<objKeys.length; i++) {
 			var key = objKeys[i];
+			if (typeof obj[key] === "function" || obj[key] === undefined) {
+				continue;
+			}
 			result += stringifyJSON(key) + ":" + stringifyJSON(obj[key]);
 			if (i !== objKeys.length - 1) {
 				result += ",";
