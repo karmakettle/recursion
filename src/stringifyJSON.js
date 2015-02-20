@@ -34,5 +34,12 @@ var stringifyJSON = function(obj) {
 		}
 		result += "]";
 	}
+	else {
+		result += "{";
+		for (key in obj) {
+			result += stringifyJSON(key) + ": " + stringifyJSON(obj[key]);
+		}
+		result += "}";
+	}
   return result;
 };
