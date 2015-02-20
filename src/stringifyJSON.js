@@ -14,6 +14,10 @@ var stringifyJSON = function(obj) {
   	return "null";
   }
   else {
+  	if (obj.length === 1) {
+  		return obj[0];
+  	}
+  	result += obj[0];
 	  result += stringifyJSON(obj.slice(1));
 	}
   return result;
