@@ -6,19 +6,23 @@
 var stringifyJSON = function(obj) {
   // your code goes here
   //note to self: special characters dictionary: []{},"
-  result = '';
+  var result = "";
   if (typeof obj === "number" || typeof obj === "boolean") {
-  	result += obj;
+  	result = "" + obj;
+  	return result;
   }
   else if (obj === null) {
   	return "null";
   }
-  else {
+  else if (typeof obj === "string") {
   	if (obj.length === 1) {
-  		return obj[0];
+  		return obj[0] + "\"";
   	}
   	result += obj[0];
-	  result += stringifyJSON(obj.slice(1));
+	  result += stringifyJSON(obj.slice(1), "placeholder");
+	  if (arguments[1] === undefined) {
+	  	result = "\"" + result;
+	  }
 	}
   return result;
 };
