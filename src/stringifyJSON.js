@@ -8,18 +8,25 @@ var stringifyJSON = function(obj) {
   //note to self: special characters dictionary: []{},"
   var result = "";
   if (typeof obj === "number" || typeof obj === "boolean") {
-  	result = "" + obj;
-  	return result;
+  	result += obj;
   }
   else if (obj === null) {
   	return "null";
   }
   else if (typeof obj === "string") {
+  	//for one-letter strings
+  	if (obj.length === 1 && arguments[1] === undefined) {
+  		return "\"" + obj + "\"";
+  	}
+  	//base case for recursion
   	if (obj.length === 1) {
   		return obj[0] + "\"";
   	}
+  	//recursive portion
   	result += obj[0];
 	  result += stringifyJSON(obj.slice(1), "placeholder");
+
+	  //little hack to make sure a quotation mark is added after recursion
 	  if (arguments[1] === undefined) {
 	  	result = "\"" + result;
 	  }
@@ -37,7 +44,7 @@ var stringifyJSON = function(obj) {
 	else {
 		result += "{";
 		for (key in obj) {
-			result += stringifyJSON(key) + ": " + stringifyJSON(obj[key]);
+			result += stringifyJSON(key) + ":" + stringifyJSON(obj[key]);
 		}
 		result += "}";
 	}
