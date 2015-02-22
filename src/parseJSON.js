@@ -47,31 +47,30 @@ var parseJSON = function(json) {
     var result = [];
     var closeBracketIdx = json.indexOf("]");
     var numCommas = numberOfCommas(closeBracketIdx);
-
-    var firstItem = json[1];
+    var nextItem = json[1];
     var endQuoteIdx = -1;
-    if (firstItem === "\"") {
-      var startQuoteIdx = json.indexOf("\"", endQuoteIdx + 1);
-      var endQuoteIdx = json.indexOf("\"", startQuoteIdx + 1);
-      var item = json.slice(startQuoteIdx + 1, endQuoteIdx);
-      var startQuoteIdx = json.indexOf("\"", endQuoteIdx + 1);
-      var endQuoteIdx = json.indexOf("\"", startQuoteIdx + 1);
-    }
+    var commaIdx = -1;
+
     for (var i=0; i <= numCommas; i++) {
+      if (nextItem === "n") {
+        var item = null;
+      }
+      else if (nextItem === "t") {
+        var item = true;
+      }
+      else if (nextItem === "f") {
+        var item = false;
+      }
+      else {
+        var startQuoteIdx = json.indexOf("\"", endQuoteIdx + 1);
+        var endQuoteIdx = json.indexOf("\"", startQuoteIdx + 1);
+        var item = json.slice(startQuoteIdx + 1, endQuoteIdx);
+      }
+    
       result.push(item);
+      commaIdx = json.indexOf(",", commaIdx + 1);
+      nextItem = json[commaIdx + 1];
     }
     return result;
   }
 };
-
-/*
-      else if (json[nextItemIdx] === "n") {
-        var key = null;
-      }
-      else if (json[nextItemIdx] === "t") {
-        var key = true;
-      }
-      else if (json[nextItemIdx] === "f") {
-        var key = false;
-      }
-*/
