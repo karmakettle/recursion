@@ -21,9 +21,9 @@ var parseJSON = function(json) {
   	return result;
   }
 
-  var numberOfCommas = function(openBracketIdx, closeBracketIdx) {
+  var numberOfCommas = function(closeBracketIdx) {
     var numCommas = 0;
-    var listSlice = json.slice(openBracketIdx, closeBracketIdx);
+    var listSlice = json.slice(0, closeBracketIdx);
     for (var i=0; i<listSlice.length; i++) {
       if (listSlice[i] === ",") {
         numCommas += 1;
@@ -37,7 +37,8 @@ var parseJSON = function(json) {
     var startQuoteIdx = 2;
     var endQuoteIdx = json.indexOf("\"", startQuoteIdx + 1);
     var closeBracketIdx = json.indexOf("]");
-    while (json[endQuoteIdx + 1] !== ']') {
+    var numCommas = numberOfCommas(closeBracketIdx);
+    for (var i=0; i <= numCommas; i++) {
       result.push(json.slice(startQuoteIdx, endQuoteIdx));
       startQuoteIdx = json.indexOf("\"", endQuoteIdx + 1) + 1;
       endQuoteIdx = json.indexOf("\"", startQuoteIdx + 1);
