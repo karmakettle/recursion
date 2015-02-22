@@ -12,16 +12,25 @@ var parseJSON = function(json) {
 
   if (json[0] === '{') {
   	var result = {};
-  	var nextQuoteIdx = json.indexOf("\"", 2);
-  	var thirdQuoteIdx = json.indexOf("\"", nextQuoteIdx + 1);
-  	var lastQuoteIdx = json.indexOf("\"", thirdQuoteIdx + 1)
-  	var key = json.slice(2, nextQuoteIdx);
-  	var val = json.slice(thirdQuoteIdx + 1, lastQuoteIdx);
-  	result[key] = val;
+    var closeBracketIdx = json.indexOf("}");
+    var numCommas = numberOfCommas(closeBracketIdx);
+    var lastQuoteIdx = -1;
+    var i = 0;
+    do {
+      var startQuoteIdx = json.indexOf("\"", lastQuoteIdx + 1);
+    	var nextQuoteIdx = json.indexOf("\"", startQuoteIdx + 1);
+    	var thirdQuoteIdx = json.indexOf("\"", nextQuoteIdx + 1);
+    	lastQuoteIdx = json.indexOf("\"", thirdQuoteIdx + 1);
+      var key = json.slice(startQuoteIdx + 1, nextQuoteIdx);
+      var val = json.slice(thirdQuoteIdx + 1, lastQuoteIdx);
+      result[key] = val;
+      i += 1;
+    } while (i <= numCommas);
+
   	return result;
   }
 
-  var numberOfCommas = function(closeBracketIdx) {
+  function numberOfCommas(closeBracketIdx) {
     var numCommas = 0;
     var listSlice = json.slice(0, closeBracketIdx);
     for (var i=0; i<listSlice.length; i++) {
