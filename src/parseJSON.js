@@ -19,10 +19,12 @@ var parseJSON = function(json) {
     do {
       var startQuoteIdx = json.indexOf("\"", lastQuoteIdx + 1);
     	var nextQuoteIdx = json.indexOf("\"", startQuoteIdx + 1);
-    	var thirdQuoteIdx = json.indexOf("\"", nextQuoteIdx + 1);
-    	lastQuoteIdx = json.indexOf("\"", thirdQuoteIdx + 1);
-      var key = json.slice(startQuoteIdx + 1, nextQuoteIdx);
-      var val = json.slice(thirdQuoteIdx + 1, lastQuoteIdx);
+    	var nextItemIdx = nextQuoteIdx + 3;
+      if (json[nextItemIdx] === "\"") {
+      	lastQuoteIdx = json.indexOf("\"", nextItemIdx + 1);
+        var key = json.slice(startQuoteIdx + 1, nextQuoteIdx);
+        var val = json.slice(nextItemIdx + 1, lastQuoteIdx);
+      }
       result[key] = val;
       i += 1;
     } while (i <= numCommas);
@@ -43,15 +45,33 @@ var parseJSON = function(json) {
 
   if (json[0] === '[') {
     var result = [];
-    var startQuoteIdx = 2;
-    var endQuoteIdx = json.indexOf("\"", startQuoteIdx + 1);
     var closeBracketIdx = json.indexOf("]");
     var numCommas = numberOfCommas(closeBracketIdx);
+
+    var firstItem = json[1];
+    var endQuoteIdx = -1;
+    if (firstItem === "\"") {
+      var startQuoteIdx = json.indexOf("\"", endQuoteIdx + 1);
+      var endQuoteIdx = json.indexOf("\"", startQuoteIdx + 1);
+      var item = json.slice(startQuoteIdx + 1, endQuoteIdx);
+      var startQuoteIdx = json.indexOf("\"", endQuoteIdx + 1);
+      var endQuoteIdx = json.indexOf("\"", startQuoteIdx + 1);
+    }
     for (var i=0; i <= numCommas; i++) {
-      result.push(json.slice(startQuoteIdx, endQuoteIdx));
-      startQuoteIdx = json.indexOf("\"", endQuoteIdx + 1) + 1;
-      endQuoteIdx = json.indexOf("\"", startQuoteIdx + 1);
+      result.push(item);
     }
     return result;
   }
 };
+
+/*
+      else if (json[nextItemIdx] === "n") {
+        var key = null;
+      }
+      else if (json[nextItemIdx] === "t") {
+        var key = true;
+      }
+      else if (json[nextItemIdx] === "f") {
+        var key = false;
+      }
+*/
