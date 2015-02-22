@@ -9,6 +9,7 @@ var parseJSON = function(json) {
   if (json === '{}') {
   	return {};
   }
+
   if (json[0] === '{') {
   	var result = {};
   	var nextQuoteIdx = json.indexOf("\"", 2);
@@ -18,5 +19,29 @@ var parseJSON = function(json) {
   	var val = json.slice(thirdQuoteIdx + 1, lastQuoteIdx);
   	result[key] = val;
   	return result;
+  }
+
+  var numberOfCommas = function(openBracketIdx, closeBracketIdx) {
+    var numCommas = 0;
+    var listSlice = json.slice(openBracketIdx, closeBracketIdx);
+    for (var i=0; i<listSlice.length; i++) {
+      if (listSlice[i] === ",") {
+        numCommas += 1;
+      }
+    }
+    return numCommas;
+  }
+
+  if (json[0] === '[') {
+    var result = [];
+    var startQuoteIdx = 2;
+    var endQuoteIdx = json.indexOf("\"", startQuoteIdx + 1);
+    var closeBracketIdx = json.indexOf("]");
+    while (json[endQuoteIdx + 1] !== ']') {
+      result.push(json.slice(startQuoteIdx, endQuoteIdx));
+      startQuoteIdx = json.indexOf("\"", endQuoteIdx + 1) + 1;
+      endQuoteIdx = json.indexOf("\"", startQuoteIdx + 1);
+    }
+    return result;
   }
 };
